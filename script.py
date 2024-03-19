@@ -1,10 +1,25 @@
 from usuario import Usuario
+import datetime
+import os
 import json
 
 def escribir_log (excepcion):
-    with open('error.log', 'a') as archivo_error:
-        archivo_error.write(str(excepcion) + '\n')
-        archivo_error.close()
+    '''
+        Método que escribe error en un log diario. Este log escribe la fecha y hora del error más la descripción.
+        Parameter
+        -----------
+        excepcion
+            Type:   Exception
+            
+        '''
+    try:
+        archivo = f"log.{datetime.date.today()}.log"
+        fecha_hora = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open(os.path.abspath('logs/'+archivo), 'a') as log:
+            log.write(f"[{fecha_hora}]  ERROR:  {str(excepcion)}\n")
+            log.close()
+    except OSError as e:
+        print(f"Error al intentar crear el archivo log: {str(e)}")
 
 usuarios = []
 # Leer el archivo usuarios.txt línea por línea
